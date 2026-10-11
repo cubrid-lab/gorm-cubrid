@@ -1,5 +1,5 @@
-blank_issues_enabled: true
+blank_issues_enabled: false
 contact_links:
   - name: Discussions
-    url: https://github.com/cubrid-labs/gorm-cubrid/discussions
+    url: https://github.com/cubrid-lab/gorm-cubrid/discussions
     about: Ask questions and share ideas
