@@ -1,5 +1,11 @@
 # GORM CUBRID Driver
 
+<!-- CUBRID-LAB-ROLE-ICON:START -->
+<a href="https://github.com/cubrid-lab/brand">
+  <img src="https://raw.githubusercontent.com/cubrid-lab/brand/aa62d38b48d165e39f0c56ed706a9dadb090a2bb/studies/icons/gorm-cubrid.svg" alt="CUBRID Lab ORM icon (Go)" width="80" />
+</a>
+<!-- CUBRID-LAB-ROLE-ICON:END -->
+
 <!-- BADGES:START -->
 [![Go Reference](https://pkg.go.dev/badge/github.com/cubrid-labs/gorm-cubrid.svg)](https://pkg.go.dev/github.com/cubrid-labs/gorm-cubrid)
 [![v0.1.0](https://img.shields.io/badge/version-v0.1.0-blue.svg)](https://github.com/cubrid-labs/gorm-cubrid/releases)
