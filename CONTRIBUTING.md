@@ -14,7 +14,7 @@ Thank you for your interest in contributing!
 ## Getting Started
 
 ```bash
-git clone https://github.com/cubrid-labs/gorm-cubrid.git
+git clone https://github.com/cubrid-lab/gorm-cubrid.git
 cd gorm-cubrid
 go mod download
 ```
@@ -34,23 +34,7 @@ Target coverage: **90%+** for non-integration code.
 
 ### Integration tests (CUBRID server required)
 
-Integration tests are tagged with `//go:build integration` and require a running
-CUBRID 11.2+ instance.
-
-```bash
-# Start CUBRID with Docker Compose
-docker-compose up -d
-
-# Run integration tests
-go test -tags integration ./...
-```
-
-Set the connection DSN via environment variable:
-
-```bash
-export CUBRID_DSN="cubrid://dba:@localhost:33000/demodb"
-go test -tags integration ./...
-```
+The repository currently has **no test files tagged `//go:build integration`** and no checked-in Docker Compose file. The CI workflow defines a CUBRID 11.3 service on push and invokes `go test -tags integration`, but without tagged test files this is not evidence of real database behavior coverage. Do not claim `AutoMigrate`, CRUD, or schema introspection has been validated against CUBRID. Adding those scenarios requires a separate implementation and reviewed tests.
 
 ## Code Style
 
