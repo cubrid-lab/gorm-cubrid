@@ -1,10 +1,10 @@
-# CLAUDE.md — gorm-cubrid 개발 가이드
+# CLAUDE.md — gorm-cubrid 개발 컨텍스트
 
-이 파일은 Claude Code가 이 저장소에서 작업할 때 참조하는 컨텍스트입니다.
+공통 작업·리뷰·이슈 규칙은 [AGENTS.md](AGENTS.md)를 따릅니다. 이 파일은 Claude Code용 참고 컨텍스트이며 별도의 브랜치, 리뷰어 또는 승인 절차를 요구하지 않습니다.
 
 ## 프로젝트 개요
 
-`github.com/cubrid-labs/gorm-cubrid`는 [GORM](https://gorm.io/) ORM의 CUBRID 데이터베이스 드라이버입니다.
+GitHub 저장소 `cubrid-lab/gorm-cubrid` (Go module 경로 `github.com/cubrid-labs/gorm-cubrid`)는 [GORM](https://gorm.io/) ORM의 CUBRID 데이터베이스 드라이버입니다.
 `gorm.Dialector` 인터페이스를 구현하며, CUBRID 11.2+ 를 대상으로 합니다.
 
 ## 파일 구조
@@ -14,7 +14,7 @@ flowchart TD
     R[gorm-cubrid] --> F1[cubrid.go\nDialector 구현 gorm.Dialector 인터페이스 전체]
     R --> F2[migrator.go\nMigrator 구현 DDL, 스키마 조회]
     R --> F3[cubrid_test.go\n단위 테스트 CUBRID 서버 불필요]
-    R --> F4[go.mod\n의존성 gorm.io/gorm v1.25.10]
+    R --> F4[go.mod\n의존성 gorm.io/gorm v1.31.2]
 ```
 
 ## 아키텍처
@@ -76,14 +76,13 @@ go vet ./...
 
 - **단위 테스트** (`cubrid_test.go`): CUBRID 서버 없이 실행 가능. `DataTypeOf`, `QuoteTo`,
   `BindVarTo`, `Explain`, `buildColumnType` 등 순수 로직 커버.
-- **통합 테스트** (미구현): 실제 DB가 필요한 `AutoMigrate`, CRUD, `HasTable` 등은
-  `//go:build integration` 태그를 달아 별도 파일로 추가 예정.
+- **통합 테스트 상태**: 현재 저장소에는 `//go:build integration` 태그가 붙은 테스트 파일이 없습니다. `.github/workflows/ci.yml`에는 CUBRID 11.3 서비스를 사용하는 push 전용 integration job이 있지만, 그 job이 현재 실제 DB 시나리오를 검증한다고 주장하지 마세요. 실제 `AutoMigrate`, CRUD, `HasTable` 동작은 아직 검증된 것으로 간주할 수 없습니다.
 
 ## 의존성
 
 | 패키지 | 역할 |
 |---|---|
-| `gorm.io/gorm v1.25.10` | GORM 코어 |
+| `gorm.io/gorm v1.31.2` | GORM 코어 |
 | `github.com/cubrid-labs/cubrid-go` | CUBRID SQL driver (pure Go, no CGO) |
 
 > `github.com/cubrid-labs/cubrid-go` is a pure Go SQL driver registered as "cubrid".
@@ -93,5 +92,6 @@ go vet ./...
 
 ## 브랜치 전략
 
-- 기능 개발: `claude/gorm-cubrid-orm-m8SGO` 브랜치에서 작업
-- 커밋 메시지 형식: `feat:` / `fix:` / `test:` / `docs:` + 변경 요약
+- 작업 브랜치는 현재 기본 브랜치에서 작업 목적에 맞게 생성합니다. 특정 Claude 전용 브랜치를 강제하지 않습니다.
+- 커밋 메시지 형식은 [CONTRIBUTING.md](CONTRIBUTING.md#commit-messages)와 저장소의 기존 규칙을 따릅니다.
+- 사람과 모든 코딩 에이전트는 동일한 검토 기준을 적용받습니다. AI 리뷰는 참고용이며 필수 승인 절차가 아닙니다.
