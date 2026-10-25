@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Documentation
+- Add the CUBRID Lab brand icon to the README.
+
 ## [0.1.0] - 2026-03-12
 
 ### Added
