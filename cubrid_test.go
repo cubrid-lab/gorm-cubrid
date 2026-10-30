@@ -140,8 +140,10 @@ func TestDataTypeOf_CustomType(t *testing.T) {
 func TestDataTypeOf_CustomType_AutoIncrement(t *testing.T) {
 	d := &Dialector{Config: &Config{}}
 	got := d.DataTypeOf(&schema.Field{DataType: "serial", AutoIncrement: true})
-	// "serial" already implies auto-increment; but if it doesn't contain the keyword
-	// our code appends it.
+	// A custom type keeps its name. DataTypeOf appends " auto_increment" only
+	// when the type text does not already contain that keyword, so "serial"
+	// becomes "serial auto_increment"; this check only requires the name to
+	// survive.
 	if !strings.Contains(got, "serial") {
 		t.Errorf("DataTypeOf(serial) = %q, should contain %q", got, "serial")
 	}

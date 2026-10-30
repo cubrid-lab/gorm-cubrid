@@ -46,3 +46,55 @@ AI summaries.
 - `go test ./...`
 - `make vet`
 - `make test-integration` when integration paths are touched
+
+## Human-readable communication (all agents)
+
+Use this rule for text authored or edited by Codex, Claude Code, OpenCode,
+ChatGPT, Copilot, or any other agent. It applies to issues, PRs, reviews,
+comments, checklists, status updates, commit summaries, release notes,
+documentation, presentations, and other maintainer-facing writing.
+
+- Write for a reader unfamiliar with the underlying script, storyboard,
+  automation run, or agent plan. Name the actual project, component,
+  action, evidence, and location in ordinary, clear language.
+- Never use unexplained internal identifiers as reader-facing labels or
+  checklist instructions (for example, `H1, P1, C1, K1, F2` or `A1/B1/R1/R2`).
+  Do not substitute `P1`/`P2` for repository priority labels.
+- When an internal identifier is necessary for accurate cross-reference,
+  **describe the subject first**, then add the identifier in context:
+  `pycubrid introduction (0:20; storyboard shot P1)`. Use descriptive
+  names and timestamps, section titles, or paths wherever practical.
+- Use natural, actionable wording. Prefer `Listen to the full narration and
+  verify the pronunciation of each project name` to `Maintainer full listen`.
+  Avoid compressed task fragments, unexplained acronyms, and generated
+  process/status jargon.
+- Keep legitimate technical identifiers unchanged in code, tests, structured
+  data, logs, specifications, and exact evidence references. Issue numbers,
+  filenames, command names, APIs, error codes, and hashes are not prohibited.
+  Do not break machine-readable references to improve prose.
+- Before publishing, reread the text as a first-time maintainer. It should
+  state what happened or needs to happen, why, and where without requiring a
+  separate lookup table. Edit an existing editable comment to correct unclear
+  wording rather than adding redundant follow-up comments.
+
+This is a shared writing convention, not a new CI check, reviewer approval,
+or merge gate. Keep existing repository-specific technical and safety rules.
+
+### Explanations in code, tests and reviews
+
+Source comments, test names and test comments, examples, PR descriptions and
+review replies follow
+[section 6 of the cubrid-lab issue, PR, and commit standard](https://github.com/cubrid-lab/.github/blob/main/docs/ISSUE_PR_COMMIT_STANDARD.md#6-explanations-in-code-tests-reviews-and-agent-written-text):
+say what happens, why it matters and the constraint involved, in plain
+English, before any issue number or scenario code. Identifiers are fine for
+traceability once explained; keep machine-readable names (test names used for
+discovery, fixtures, error codes, paths) unchanged, and revise only text a
+reader would find unclear.
+
+In this dialect, a comment on the dialector, migrator overrides or type
+mapping should state the CUBRID-versus-GORM difference that requires the code
+(for example, that CUBRID needs `DROP INDEX idx ON table`) rather than only
+citing the issue where it was found.
+
+This repository's own safety, build, test and release rules take precedence
+where they differ from the shared standard.
