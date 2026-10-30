@@ -79,3 +79,22 @@ documentation, presentations, and other maintainer-facing writing.
 
 This is a shared writing convention, not a new CI check, reviewer approval,
 or merge gate. Keep existing repository-specific technical and safety rules.
+
+### Explanations in code, tests and reviews
+
+Source comments, test names and test comments, examples, PR descriptions and
+review replies follow
+[section 6 of the cubrid-lab issue, PR, and commit standard](https://github.com/cubrid-lab/.github/blob/main/docs/ISSUE_PR_COMMIT_STANDARD.md#6-explanations-in-code-tests-reviews-and-agent-written-text):
+say what happens, why it matters and the constraint involved, in plain
+English, before any issue number or scenario code. Identifiers are fine for
+traceability once explained; keep machine-readable names (test names used for
+discovery, fixtures, error codes, paths) unchanged, and revise only text a
+reader would find unclear.
+
+In this dialect, a comment on the dialector, migrator overrides or type
+mapping should state the CUBRID-versus-GORM difference that requires the code
+(for example, that CUBRID needs `DROP INDEX idx ON table`) rather than only
+citing the issue where it was found.
+
+This repository's own safety, build, test and release rules take precedence
+where they differ from the shared standard.
