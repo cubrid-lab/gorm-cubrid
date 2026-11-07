@@ -57,5 +57,11 @@
 
 - [ ] Clean checkout and native dependency install resolve without unexpected manifest/lockfile changes; report runtime/compiler version and result, or explain why not run.
 - [ ] Do not confuse local build/offline tests with actual live CUBRID SQL execution. Record the database/version and count of executed integration cases when claiming that behavior.
-- [ ] Public package engines, Go module path, Cargo MSRV/features and versioned dependency constraints are reviewed if relevant; no silent compatibility-breaking setup change.
+- [ ] Go module path, GORM API, driver dependency version range and migration behavior reviewed if relevant; no silent compatibility-breaking setup change.
 - [ ] Required final-head CI and release checks remain in place; missing/failed/skipped checks are reported truthfully and a docs-only shortcut is **not** a release verification.
+
+## Repository-owned change and reference review
+
+- [ ] The title, rationale, expected behavior, ADR context and release notes describe **gorm-cubrid**'s own responsibility (Go GORM adapter, SQL generation and migrations), not work to replicate another repository's design or release.
+- [ ] Cross-repository links, if any, are necessary for an actual supported dependency/consumer interface, an independent CUBRID/JDBC comparison, or explicitly scoped coordination. They are context, not substituted test evidence or tracking ownership.
+- [ ] Issue/PR/ADR text does not contain pasted tooling, API names, version rules, or test claims belonging to an unrelated language or repository.
