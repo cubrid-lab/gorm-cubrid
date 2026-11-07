@@ -9,7 +9,7 @@
 
 GORM needs an idiomatic Go Dialector/Migrator and CUBRID SQL semantics. cubrid-go provides the database/sql driver but also contains a dialector, creating an ownership overlap. The GORM project currently has a CUBRID integration job whose existence does not demonstrate tagged real DB test coverage.
 
-The CUBRID Python driver and SQLAlchemy dialect provide engineering lessons about protocol, SQL and transaction correctness, **not** implementations or cross-language public APIs to copy.
+This decision is grounded in gorm-cubrid's own public interfaces, repository code, and CUBRID correctness requirements. External implementations cannot substitute for local validation.
 
 ## Decision
 
