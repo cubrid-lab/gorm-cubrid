@@ -4,7 +4,7 @@
 
 ## Product boundary
 
-`gorm-cubrid` is a **Go GORM dialect**, not a database protocol driver. It consumes `cubrid-go` through the standard `database/sql` interface. The `pycubrid` and `sqlalchemy-cubrid` division is an ownership precedent only; Go applications must use idiomatic GORM constructs, not translated Python DB-API/SQLAlchemy patterns.
+`gorm-cubrid` is a **Go GORM dialect**, not a database protocol driver. It consumes `cubrid-go` through the standard `database/sql` interface. Its SQL generation, model mapping and migrations are governed by the public GORM APIs and verified CUBRID behavior, not another ORM's architecture.
 
 ```text
 Go application + GORM models
