@@ -37,6 +37,37 @@ Recommended release-note headings (omit empty sections): **Highlights**, **Break
 
 Release automation may prepare a candidate PR, but **must not skip the review, release gate or registry verification**. Choose language-appropriate tools and do not copy an npm workflow into Go or Cargo unmodified.
 
+## Mandatory live-CUBRID release verification
+
+**Release rule, not an existing CI claim:** Before publishing **any release that changes or claims database behavior**, run DB-backed tests against the exact candidate commit and testable published package/module/crate; before **1.0**, complete the full documented supported CUBRID version matrix. For ordinary doc-only or tooling PRs, lightweight checks may be sufficient, but the eventual **release candidate** must not use the docs-only shortcut to skip a required database gate.
+
+**Minimum evidence by responsibility:**
+
+| Verification category | Database driver | ORM/dialect adapter |
+| --- | --- | --- |
+| Connection and session | Broker/CAS handshake, version discovery, disconnect/reconnect, stale handles | Driver connection acquisition and correct transaction-bound session |
+| Query behavior | Prepared/parameterized execution, SELECT and DML results, cursor/stream cleanup | Actual ORM-generated SELECT/JOIN/CRUD SQL, result mapping, associations |
+| Data fidelity | NULL, BIGINT, decimal precision, text/Unicode, bytes, date/time, collections as supported | ORM-level round trips and type inference/conversion for the same supported types |
+| Transactions | Commit, rollback, concurrent clients, failed/uncertain commit, isolation | Nested transactions/savepoints if advertised, rollback and error propagation |
+| Failure/recovery | Timeout, CAS restart, broken connection, SQL/server errors, no unsafe replay | Failed queries/transactions, connection loss and no silent success |
+| Schema/migration | Catalog or DDL only where the driver advertises support | Schema discovery and real CREATE/ALTER/index/constraint changes, destructive-change safety and recovery |
+
+**Matrix and test validity:**
+
+1. Identify actual CUBRID **server and broker** versions under test and the exact driver/ORM/runtime/dependency versions. A proposed range (e.g. 10.2–11.4) is not a verified range until each advertised version family is tested or its limits explicitly stated.
+2. Provision an isolated CUBRID database with a reliable readiness probe. Create unique test tables or databases; clean up safely even after failures. Never run destructive migration tests on shared or production databases.
+3. Run non-vacuous tests that **connect to the server, execute SQL and assert stored/read results**. A healthy Docker container, successful ping, mock test, query snapshot or passing job with zero integration tests is **not evidence**.
+4. Include both success and failure-path evidence. Add selected JDBC-based semantic comparisons where valuable for rows, types and transaction outcomes, but do not depend on byte-for-byte parity or use JDBC as an implementation blueprint.
+5. Record the tested commit SHA, CUBRID version and image/reference digest where possible, test command, counts of passed/failed/skipped cases, and artifacts/logs. Zero executed tests, missing environment, skipped required cases or failing required database jobs block the relevant release claim.
+6. Run a **release-candidate-only full verification** even when change-impact routing skips DB jobs on docs-only pull requests. Fail closed for inconclusive evidence; rerun on the exact final candidate after a code or release-manifest change.
+7. Test the **actual distributed artifact** in a small external consumer (Go module, Rust crate or npm tarball). In-repository tests cannot alone confirm release metadata, dependency resolution, or imported runtime behavior.
+
+**Scope:** This is a policy requirement. Existing green CI runs are not reclassified as complete integration evidence. Implementation of new CI jobs, server provisioning and tests must be separately reviewed. No automatic 1.0 release is authorized by this document.
+
+**GORM-specific blocker:** `.github/workflows/ci.yml` defines a CUBRID 11.3 service on **push** only and runs `go test -tags integration`, but repository guidance reports that no integration-tagged tests exist. A green job without SQL assertions is not evidence. Implement live CRUD, relationship, association, transaction, generated ID and actual AutoMigrate/catalog assertions. Use a disposable test database, and require full live evidence on a release candidate, including one or more versions explicitly declared supported. Confirm behavior with the version of `cubrid-go` actually installed by a consumer.
+
+Implementation tracker: [#43](https://github.com/cubrid-lab/gorm-cubrid/issues/43).
+
 ## 1.0 release gate
 
 A 1.0 release requires: a reviewed/frozen public interface, documented supported runtime and CUBRID matrix, real-database evidence for advertised database behavior, transaction/result/precision/error correctness, packaged consumer/install test, reproducible CI, explicit unsupported features, and upgrade instructions from 0.x. Documentation or test-count badges alone do not satisfy this gate.
