@@ -7,7 +7,60 @@ on:
     branches: ["main"]
 
 jobs:
+  impact:
+    name: Classify changes
+    runs-on: ubuntu-latest
+    outputs:
+      docs_only: ${{ steps.select.outputs.docs_only }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - id: select
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          docs_only() {
+            local p found=0
+            while IFS= read -r -d '' p; do
+              found=1
+              case "$p" in
+                *.md|*.mdx|*.rst|docs/*.png|docs/*.jpg|docs/*.jpeg|docs/*.svg|docs/*.webp) ;;
+                *) return 1 ;;
+              esac
+            done
+            [[ "$found" -eq 1 ]]
+          }
+          docs_only < <(printf 'README.md\0docs/guide.md\0')
+          if docs_only < <(printf 'README.md\0go.mod\0'); then exit 1; fi
+          if docs_only < <(printf '.github/workflows/ci.yml\0'); then exit 1; fi
+          if docs_only < /dev/null; then exit 1; fi
+          selected=false
+          if [[ "$EVENT_NAME" == pull_request ]] &&
+             git rev-parse --verify HEAD^2 >/dev/null 2>&1 &&
+             git -c core.quotePath=false diff --no-renames --name-only -z HEAD^1 HEAD > "$RUNNER_TEMP/changed-paths.bin"; then
+            if docs_only < "$RUNNER_TEMP/changed-paths.bin"; then selected=true; fi
+          fi
+          echo "docs_only=$selected" >> "$GITHUB_OUTPUT"
+          echo "CI impact: docs_only=$selected" >> "$GITHUB_STEP_SUMMARY"
+
+  docs-check:
+    needs: impact
+    if: ${{ always() && needs.impact.outputs.docs_only == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - run: git diff --check HEAD^1 HEAD
+
   test:
+    needs: impact
+    if: ${{ always() && needs.impact.outputs.docs_only != 'true' }}
     name: Unit Tests (Go ${{ matrix.go }})
     runs-on: ubuntu-latest
 
@@ -84,3 +137,33 @@ jobs:
         env:
           CUBRID_DSN: "cubrid://dba:@localhost:33000/demodb"
         run: go test -tags integration -race -count=1 ./...
+
+  ci-gate:
+    name: CI gate
+    if: always()
+    needs: [impact, docs-check, test, integration]
+    runs-on: ubuntu-latest
+    env:
+      EVENT_NAME: ${{ github.event_name }}
+      IMPACT: ${{ needs.impact.result }}
+      DOCS_ONLY: ${{ needs.impact.outputs.docs_only }}
+      DOCS_CHECK: ${{ needs.docs-check.result }}
+      TEST: ${{ needs.test.result }}
+      INTEGRATION: ${{ needs.integration.result }}
+    steps:
+      - name: Verify all selected lanes
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$IMPACT" == success ]] || exit 1
+          if [[ "$DOCS_ONLY" == true ]]; then
+            [[ "$DOCS_CHECK" == success ]] || exit 1
+            [[ "$TEST" == skipped || "$TEST" == success ]] || exit 1
+          else
+            [[ "$TEST" == success ]] || { echo "::error::Go matrix: $TEST"; exit 1; }
+          fi
+          if [[ "$EVENT_NAME" == push ]]; then
+            [[ "$INTEGRATION" == success ]] || { echo "::error::Main push integration: $INTEGRATION"; exit 1; }
+          else
+            [[ "$INTEGRATION" == skipped || "$INTEGRATION" == success ]] || exit 1
+          fi
