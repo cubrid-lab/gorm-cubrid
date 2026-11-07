@@ -215,6 +215,10 @@ Notes:
   `INFORMATION_SCHEMA` support, available in CUBRID 11.2+.
 - `AUTO_INCREMENT` columns use CUBRID's native `AUTO_INCREMENT` attribute.
 
+## Development setup
+
+Use the [development setup guide](docs/DEVELOPMENT_SETUP.md) for the actual language-specific toolchain, clean dependency install, offline tests, **real CUBRID integration readiness** and known setup blockers. The [ADR index](docs/adr/README.md) records proposed release, architecture, TDD and setup decisions. Documentation alone is not a claim that those tests have run or that an unverified runtime/database version is supported.
+
 ## Ecosystem
 
 | Package | Description |

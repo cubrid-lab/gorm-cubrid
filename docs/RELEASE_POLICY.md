@@ -1,0 +1,95 @@
+# Release and compatibility policy (proposed)
+
+> **Decision stage:** Draft policy for review, 2026-11-07. This document is a release contract proposal; no version, tag, dependency or publication workflow changes are made by this PR. Architecture/implementation follow only after approval and merge.
+
+## Go GORM adapter correctness and verification
+
+Review [the repository-specific engineering invariants](ENGINEERING_INVARIANTS.md) before accepting behavioral CUBRID changes or declaring database compatibility. The checklist follows this repository's own API, implementation risks, and verifiable CUBRID behavior. **Written review rules are not executable checks**: the real-CUBRID release gate below remains mandatory, and any missing test coverage is tracked as implementation work rather than claimed complete.
+
+## Reproducible development setup prerequisite
+
+[Setup ADR 0005](adr/0005-development-setup.md) and the [language-specific development setup guide](DEVELOPMENT_SETUP.md) define the pre-implementation environment contract. A release candidate must be built from a clean checkout with the reviewed manifest and supported compiler/runtime, and must verify the **actual distributed artifact** independently of local workspace source. Setup ready, offline tests passed, live CUBRID verified, and registry publication confirmed are distinct outcomes. Document missing lint config, non-resolving module/crate dependency or absent integration harness as **blocking/unverified**, not green. A passing unit suite cannot waive the candidate's real-database gate. Changing the minimum supported consumer runtime/module path/MSRV is separately reviewed for SemVer impact; no such change is authorized by this setup documentation.
+
+## Version numbers
+
+Use SemVer for **each publicly distributed package/module/crate**. A compatibility-generation relationship between the CUBRID driver and its ORM adapter does not override an individual package's SemVer contract.
+
+| Change | Before 1.0 | From 1.0 onward |
+| --- | --- | --- |
+| New backward-compatible functionality | MINOR (0.y+1.0) | MINOR |
+| Incompatible public API, supported runtime, connection/result behavior, or SQL/migration contract | MINOR with explicit migration notes | MAJOR |
+| Backward-compatible defect, security, documentation or tooling fix | PATCH when published behavior remains compatible | PATCH |
+| Internal-only code/documentation without user-visible change | No release required unless part of a reviewed release batch | Same |
+
+A severe correctness defect is repaired promptly; explain any observable change, regression tests and consumer impact. Do not conceal an incompatible change as PATCH. Do not infer compatibility from unchanged type signatures alone: SQL meaning, column value mapping and schema migration behavior can break applications.
+
+A release's **version, supported runtime/database ranges, published package exports, immutable tag and release notes must agree**. The new version is not considered released merely because a manifest was edited or a draft PR merged.
+
+## Driver ↔ ORM compatibility generations
+
+- Target **1.x driver + 1.x ORM** for each language's first verified stable integration. This is a *supported compatibility generation*, not simultaneous publication or equality of full version strings.
+- Driver and ORM MINOR/PATCH releases are independent. A newer driver release does not automatically authorize a new ORM release.
+- Driver MAJOR release triggers an ORM compatibility assessment and tested peer/module/crate version policy. Publish a new adapter MAJOR **only when its own compatibility promise changes incompatibly**; do not force a pointless MAJOR just for matching digits.
+- If an ORM's own API needs a MAJOR independently of the driver, honor SemVer and document the temporary numeric mismatch. Never hide breaking changes to keep the numbers equal.
+- Publish bounded **actually tested** dependency support ranges, not open-ended assumptions. Include explicitly tested CUBRID database versions. Unverified combinations must be labeled unverified.
+
+## Workflow and release notes
+
+1. Merge scoped code/test/documentation PRs with required final-head CI. Architectural notes and mocked tests are not substitutes for live CUBRID tests.
+2. Open a **reviewed release candidate PR** containing the proposed version change, manifest/lockfile or crate metadata, release notes, API/compatibility notes, and any migration instructions. No automatic publish directly from arbitrary feature PR merges.
+3. Run an explicit **release preflight** on the exact candidate commit: quality/lint/tests, real supported database matrix where the release makes DB behavior claims, package/build artifact verification, dependency lower-bound and consumer smoke tests, and security/secret checks. Fail closed for missing, failed, cancelled or skipped required release checks.
+4. A maintainer approves the candidate and release notes. Release/publishing permission changes need independent security review. Only then create immutable tags and publish to the language's registry. Do not overwrite tags or re-publish an existing version.
+5. Verify the public registry artifact and GitHub Release match the reviewed commit and tag. Record evidence and a release recovery/retry procedure; do not mask a partial publish as a success.
+
+Recommended release-note headings (omit empty sections): **Highlights**, **Breaking changes / Migration**, **Fixes**, **Compatibility**, **Dependencies**, and **Contributors**. Attribute contributions inline with `by @username` where provenance is known; optionally welcome verified first-time contributors. Avoid broken Markdown line wrapping, misleading first-contribution claims, and autogenerated duplicate contributor credits.
+
+Release automation may prepare a candidate PR, but **must not skip the review, release gate or registry verification**. Choose language-appropriate tools and do not copy an npm workflow into Go or Cargo unmodified.
+
+## Mandatory live-CUBRID release verification
+
+**Release rule, not an existing CI claim:** Before publishing **any release that changes or claims database behavior**, run DB-backed tests against the exact candidate commit and testable published package/module/crate; before **1.0**, complete the full documented supported CUBRID version matrix. For ordinary doc-only or tooling PRs, lightweight checks may be sufficient, but the eventual **release candidate** must not use the docs-only shortcut to skip a required database gate.
+
+**Minimum evidence by responsibility:**
+
+| Verification category | Database driver | ORM/dialect adapter |
+| --- | --- | --- |
+| Connection and session | Broker/CAS handshake, version discovery, disconnect/reconnect, stale handles | Driver connection acquisition and correct transaction-bound session |
+| Query behavior | Prepared/parameterized execution, SELECT and DML results, cursor/stream cleanup | Actual ORM-generated SELECT/JOIN/CRUD SQL, result mapping, associations |
+| Data fidelity | NULL, BIGINT, decimal precision, text/Unicode, bytes, date/time, collections as supported | ORM-level round trips and type inference/conversion for the same supported types |
+| Transactions | Commit, rollback, concurrent clients, failed/uncertain commit, isolation | Nested transactions/savepoints if advertised, rollback and error propagation |
+| Failure/recovery | Timeout, CAS restart, broken connection, SQL/server errors, no unsafe replay | Failed queries/transactions, connection loss and no silent success |
+| Schema/migration | Catalog or DDL only where the driver advertises support | Schema discovery and real CREATE/ALTER/index/constraint changes, destructive-change safety and recovery |
+
+**Matrix and test validity:**
+
+1. Identify actual CUBRID **server and broker** versions under test and the exact driver/ORM/runtime/dependency versions. A proposed range (e.g. 10.2–11.4) is not a verified range until each advertised version family is tested or its limits explicitly stated.
+2. Provision an isolated CUBRID database with a reliable readiness probe. Create unique test tables or databases; clean up safely even after failures. Never run destructive migration tests on shared or production databases.
+3. Run non-vacuous tests that **connect to the server, execute SQL and assert stored/read results**. A healthy Docker container, successful ping, mock test, query snapshot or passing job with zero integration tests is **not evidence**.
+4. Include both success and failure-path evidence. Add selected JDBC-based semantic comparisons where valuable for rows, types and transaction outcomes, but do not depend on byte-for-byte parity or use JDBC as an implementation blueprint.
+5. Record the tested commit SHA, CUBRID version and image/reference digest where possible, test command, counts of passed/failed/skipped cases, and artifacts/logs. Zero executed tests, missing environment, skipped required cases or failing required database jobs block the relevant release claim.
+6. Run a **release-candidate-only full verification** even when change-impact routing skips DB jobs on docs-only pull requests. Fail closed for inconclusive evidence; rerun on the exact final candidate after a code or release-manifest change.
+7. Test the **actual distributed artifact** in a small external consumer (Go module, Rust crate or npm tarball). In-repository tests cannot alone confirm release metadata, dependency resolution, or imported runtime behavior.
+
+**Scope:** This is a policy requirement. Existing green CI runs are not reclassified as complete integration evidence. Implementation of new CI jobs, server provisioning and tests must be separately reviewed. No automatic 1.0 release is authorized by this document.
+
+**GORM-specific blocker:** `.github/workflows/ci.yml` defines a CUBRID 11.3 service on **push** only and runs `go test -tags integration`, but repository guidance reports that no integration-tagged tests exist. A green job without SQL assertions is not evidence. Implement live CRUD, relationship, association, transaction, generated ID and actual AutoMigrate/catalog assertions. Use a disposable test database, and require full live evidence on a release candidate, including one or more versions explicitly declared supported. Confirm behavior with the version of `cubrid-go` actually installed by a consumer.
+
+Implementation tracker: [#43](https://github.com/cubrid-lab/gorm-cubrid/issues/43).
+
+## 1.0 release gate
+
+A 1.0 release requires: a reviewed/frozen public interface, documented supported runtime and CUBRID matrix, real-database evidence for advertised database behavior, transaction/result/precision/error correctness, packaged consumer/install test, reproducible CI, explicit unsupported features, and upgrade instructions from 0.x. Documentation or test-count badges alone do not satisfy this gate.
+
+Design PRs may be developed as drafts in parallel, but **must not be treated as implementing or approving a release contract**. Do not remove, overwrite or silently narrow an existing 0.x public feature while preparing this policy.
+
+## GORM adapter release policy
+
+- Current published version `v0.1.0`; `go.mod` declares `go 1.21`, GORM `v1.31.2`, and module `github.com/cubrid-labs/gorm-cubrid`, differing from today's repository owner. Verify module download/import paths before modifications.
+- The adapter owns the GORM `Dialector`, SQL clauses, type mapping, and migrator. CUBRID TCP/CAS connection behavior belongs to the `cubrid-go` `database/sql` driver.
+- Target the first stable GORM 1.x against a **tested Go-driver 1.x dependency generation**. As the current Go module has no direct `cubrid-go` dependency, validate a *consumer* importing both modules with the exact supported versions; do not invent a direct `require` just for version alignment.
+- Breaking GORM model/schema changes, silent handling of unsupported clauses, and destructive `AutoMigrate` behavior count as compatibility risks requiring clear migration guidance regardless of Go function signatures.
+- Go SIV applies separately to this module. v2+ requires a `/v2` module and import path. A major increase in the core driver alone does not automatically force a GORM adapter major.
+- Preflight: Go build, vet, race/unit tests; real CUBRID GORM CRUD/associations/transactions, CUBRID catalog migration tests, consumer imports, and tested driver/GORM version matrix. The currently tracked absence of genuine integration scenarios blocks a production-ready 1.0 claim.
+- Keep the old `cubrid-go/dialector` users functioning through a documented compatibility migration rather than breaking them during version policy adoption.
+
+Related: [GORM policy #40](https://github.com/cubrid-lab/gorm-cubrid/issues/40), [integration evidence #43](https://github.com/cubrid-lab/gorm-cubrid/issues/43), [native GORM design #44](https://github.com/cubrid-lab/gorm-cubrid/issues/44).
