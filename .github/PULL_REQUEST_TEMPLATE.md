@@ -30,3 +30,12 @@
 ## Related Issues
 
 <!-- Link to related issues: Closes #123, Fixes #456 -->
+
+## CUBRID correctness and regression evidence
+
+<!-- For affected behavior, link reproducible evidence or state not yet tested. See docs/ENGINEERING_INVARIANTS.md. -->
+
+- [ ] The ORM SQL and schema/migration behavior is verified against CUBRID rather than inferred from another dialect; unsupported clauses are not silently dropped.
+- [ ] For relevant changes, I tested transaction commit/rollback/failure and result/value fidelity through the actual `cubrid-go` driver.
+- [ ] I distinguished real DB integration from mocked/offline tests, reported actual tests run/skipped and marked unverified DB versions accurately.
+- [ ] I reviewed GORM model/public API and module compatibility, including existing users of the in-driver dialector.
