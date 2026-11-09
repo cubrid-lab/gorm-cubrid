@@ -1,8 +1,8 @@
 # AGENTS.md
 
-## Organization-wide issue and PR standards
+## Issue and pull request guidance (gorm-cubrid)
 
-See [the cubrid-lab standard](https://github.com/cubrid-lab/.github/blob/main/docs/ISSUE_PR_COMMIT_STANDARD.md). Use clear type-only **Issue** titles (`feat:`, `bug:`, `docs:`), no required module scope. State problem/goal and verifiable completion conditions, distinguishing evidence from assumptions. Triage establishes validity, duplicates, priority and size; **PRs and commits** keep their existing Conventional Commits and CI checks. Avoid AI-agent narration, personal references and opaque internal tracking codes in issue prose.
+See [the local contributor guide](CONTRIBUTING.md). Use clear type-only **Issue** titles (`feat:`, `bug:`, `docs:`), no required module scope. State problem/goal and verifiable completion conditions, distinguishing evidence from assumptions. Triage establishes validity, duplicates, priority and size; **PRs and commits** keep their existing Conventional Commits and CI checks. Avoid AI-agent narration, personal references and opaque internal tracking codes in issue prose.
 
 
 ## Purpose
@@ -96,14 +96,14 @@ documentation, presentations, and other maintainer-facing writing.
   separate lookup table. Edit an existing editable comment to correct unclear
   wording rather than adding redundant follow-up comments.
 
-This is a shared writing convention, not a new CI check, reviewer approval,
+These are local writing expectations, not a new CI check, reviewer approval,
 or merge gate. Keep existing repository-specific technical and safety rules.
 
 ### Explanations in code, tests and reviews
 
 Source comments, test names and test comments, examples, PR descriptions and
 review replies follow
-[section 6 of the cubrid-lab issue, PR, and commit standard](https://github.com/cubrid-lab/.github/blob/main/docs/ISSUE_PR_COMMIT_STANDARD.md#6-explanations-in-code-tests-reviews-and-agent-written-text):
+the local explanation rule below:
 say what happens, why it matters and the constraint involved, in plain
 English, before any issue number or scenario code. Identifiers are fine for
 traceability once explained; keep machine-readable names (test names used for
@@ -115,8 +115,7 @@ mapping should state the CUBRID-versus-GORM difference that requires the code
 (for example, that CUBRID needs `DROP INDEX idx ON table`) rather than only
 citing the issue where it was found.
 
-This repository's own safety, build, test and release rules take precedence
-where they differ from the shared standard.
+The safety, build, test and release rules in this repository are authoritative.
 
 ## Repository ownership in issues, PRs, and design documents
 
