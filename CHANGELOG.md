@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Upgrade notes
+
+- **Module path moved to `github.com/cubrid-lab/gorm-cubrid`.** The repository
+  lives under the `cubrid-lab` organization, and starting with the first
+  release after v0.1.0 the Go module path is `github.com/cubrid-lab/gorm-cubrid`.
+  v0.1.0 keeps its published path, `github.com/cubrid-labs/gorm-cubrid`, and
+  stays fetchable under it through the module proxy and the GitHub redirect.
+  Newer releases exist only under the new path: requesting one through the old
+  path fails with a "module declares its path as
+  github.com/cubrid-lab/gorm-cubrid" error. To migrate:
+
+  ```sh
+  go get github.com/cubrid-lab/gorm-cubrid@latest
+  grep -rl 'github.com/cubrid-labs/gorm-cubrid' --include='*.go' . \
+    | xargs sed -i 's#github.com/cubrid-labs/gorm-cubrid#github.com/cubrid-lab/gorm-cubrid#g'
+  go mod tidy
+  ```
+
+  On macOS use `sed -i ''`. The driver import does not change yet: keep
+  `import _ "github.com/cubrid-labs/cubrid-go"` until cubrid-go publishes a
+  release under `github.com/cubrid-lab/cubrid-go`; the documentation here
+  switches to the new driver path at that point.
+
 ### Documentation
 - Add the CUBRID Lab brand icon to the README.
 
@@ -38,5 +61,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Connection validation via `Ping()` on `Initialize`
 - Unit test suite (38 tests, no CUBRID server required)
 
-[Unreleased]: https://github.com/cubrid-labs/gorm-cubrid/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/cubrid-labs/gorm-cubrid/releases/tag/v0.1.0
+[Unreleased]: https://github.com/cubrid-lab/gorm-cubrid/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/cubrid-lab/gorm-cubrid/releases/tag/v0.1.0

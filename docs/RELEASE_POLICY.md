@@ -84,7 +84,7 @@ Design PRs may be developed as drafts in parallel, but **must not be treated as 
 
 ## GORM adapter release policy
 
-- Current published version `v0.1.0`; `go.mod` declares `go 1.21`, GORM `v1.31.2`, and module `github.com/cubrid-labs/gorm-cubrid`, differing from today's repository owner. Verify module download/import paths before modifications.
+- Current published version `v0.1.0`; `go.mod` declares `go 1.21`, GORM `v1.31.2`, and module `github.com/cubrid-lab/gorm-cubrid`, matching the repository. The new path ships with the next 0.x minor release; v0.1.0 was published as `github.com/cubrid-labs/gorm-cubrid` and remains fetchable under that path. Release preflight for the first release under the new path must confirm that `go get github.com/cubrid-lab/gorm-cubrid@<tag>` resolves through the module proxy and that an external consumer builds with it. Driver examples keep the `github.com/cubrid-labs/cubrid-go` import until cubrid-go publishes a release under `github.com/cubrid-lab/cubrid-go`.
 - The adapter owns the GORM `Dialector`, SQL clauses, type mapping, and migrator. CUBRID TCP/CAS connection behavior belongs to the `cubrid-go` `database/sql` driver.
 - Target the first stable GORM 1.x against a **tested Go-driver 1.x dependency generation**. As the current Go module has no direct `cubrid-go` dependency, validate a *consumer* importing both modules with the exact supported versions; do not invent a direct `require` just for version alignment.
 - Breaking GORM model/schema changes, silent handling of unsupported clauses, and destructive `AutoMigrate` behavior count as compatibility risks requiring clear migration guidance regardless of Go function signatures.

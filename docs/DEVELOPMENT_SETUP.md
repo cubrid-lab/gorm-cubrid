@@ -4,7 +4,7 @@
 
 ## Toolchain and clean checkout
 
-Use Go **1.21 or later** (CI: 1.21/1.22/1.23). This repository defines its own `gorm.io/gorm` dependency; the DB driver and GORM dialect have distinct ownership. Current `go.mod` module name is `github.com/cubrid-labs/gorm-cubrid` although the GitHub repository owner is `cubrid-lab`; do **not** silently change the import path during setup.
+Use Go **1.21 or later** (CI: 1.21/1.22/1.23). This repository defines its own `gorm.io/gorm` dependency; the DB driver and GORM dialect have distinct ownership. The `go.mod` module path is `github.com/cubrid-lab/gorm-cubrid`, matching the repository, starting with the first release after v0.1.0; v0.1.0 was published as `github.com/cubrid-labs/gorm-cubrid` and stays fetchable under that path (see the upgrade notes in [CHANGELOG.md](../CHANGELOG.md)). Examples still import the driver as `github.com/cubrid-labs/cubrid-go` until cubrid-go publishes a release under `github.com/cubrid-lab/cubrid-go`.
 
 ```sh
 git clone https://github.com/cubrid-lab/gorm-cubrid.git

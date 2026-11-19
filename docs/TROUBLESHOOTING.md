@@ -146,4 +146,4 @@ services:
 
 1. Check the [README](../README.md) for basic usage
 2. Review [API Reference](API_REFERENCE.md) for all available options
-3. Open an issue on [GitHub](https://github.com/cubrid-labs/gorm-cubrid/issues)
+3. Open an issue on [GitHub](https://github.com/cubrid-lab/gorm-cubrid/issues)

@@ -7,12 +7,12 @@
 # GORM CUBRID Driver
 
 <!-- BADGES:START -->
-[![Go Reference](https://pkg.go.dev/badge/github.com/cubrid-labs/gorm-cubrid.svg)](https://pkg.go.dev/github.com/cubrid-labs/gorm-cubrid)
-[![v0.1.0](https://img.shields.io/badge/version-v0.1.0-blue.svg)](https://github.com/cubrid-labs/gorm-cubrid/releases)
+[![Go Reference](https://pkg.go.dev/badge/github.com/cubrid-lab/gorm-cubrid.svg)](https://pkg.go.dev/github.com/cubrid-lab/gorm-cubrid)
+[![v0.1.0](https://img.shields.io/badge/version-v0.1.0-blue.svg)](https://github.com/cubrid-lab/gorm-cubrid/releases)
 [![Go 1.21+](https://img.shields.io/badge/go-1.21%2B-00ADD8.svg)](https://go.dev)
-[![ci workflow](https://github.com/cubrid-labs/gorm-cubrid/actions/workflows/ci.yml/badge.svg)](https://github.com/cubrid-labs/gorm-cubrid/actions/workflows/ci.yml)
-[![license](https://img.shields.io/github/license/cubrid-labs/gorm-cubrid)](https://github.com/cubrid-labs/gorm-cubrid/blob/main/LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/cubrid-labs/gorm-cubrid)](https://github.com/cubrid-labs/gorm-cubrid)
+[![ci workflow](https://github.com/cubrid-lab/gorm-cubrid/actions/workflows/ci.yml/badge.svg)](https://github.com/cubrid-lab/gorm-cubrid/actions/workflows/ci.yml)
+[![license](https://img.shields.io/github/license/cubrid-lab/gorm-cubrid)](https://github.com/cubrid-lab/gorm-cubrid/blob/main/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/cubrid-lab/gorm-cubrid)](https://github.com/cubrid-lab/gorm-cubrid)
 <!-- BADGES:END -->
 
 
@@ -34,7 +34,7 @@ flowchart TD
 ## Installation
 
 ```bash
-go get github.com/cubrid-labs/gorm-cubrid
+go get github.com/cubrid-lab/gorm-cubrid
 ```
 
 The CUBRID Go SQL driver must also be installed:
@@ -45,6 +45,8 @@ go get github.com/cubrid-labs/cubrid-go
 
 `cubrid-go` is a pure Go driver — no CGO or native libraries required.
 
+> **Import path change:** the gorm-cubrid module path is `github.com/cubrid-lab/gorm-cubrid` starting with the first release after v0.1.0; v0.1.0 is published as `github.com/cubrid-labs/gorm-cubrid`. The driver keeps the `github.com/cubrid-labs/cubrid-go` import path until cubrid-go releases under `github.com/cubrid-lab/cubrid-go`. See the [upgrade notes](CHANGELOG.md#upgrade-notes).
+
 ## Usage
 
 ```go
@@ -53,7 +55,7 @@ package main
 import (
     _ "github.com/cubrid-labs/cubrid-go" // register CUBRID SQL driver
 
-    cubrid "github.com/cubrid-labs/gorm-cubrid"
+    cubrid "github.com/cubrid-lab/gorm-cubrid"
     "gorm.io/gorm"
 )
 
@@ -223,8 +225,8 @@ Use the [development setup guide](docs/DEVELOPMENT_SETUP.md) for the actual lang
 
 | Package | Description |
 |:--------|:------------|
-| [cubrid-go](https://github.com/cubrid-labs/cubrid-go) | database/sql driver + GORM dialector |
-| [gorm-cubrid](https://github.com/cubrid-labs/gorm-cubrid) | GORM dialect for CUBRID (this package) |
+| [cubrid-go](https://github.com/cubrid-lab/cubrid-go) | database/sql driver + GORM dialector |
+| [gorm-cubrid](https://github.com/cubrid-lab/gorm-cubrid) | GORM dialect for CUBRID (this package) |
 
 ## Roadmap
 
