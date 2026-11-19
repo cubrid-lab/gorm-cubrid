@@ -2,7 +2,7 @@
 
 ## Issue and pull request guidance (gorm-cubrid)
 
-See [the local contributor guide](CONTRIBUTING.md). Use clear type-only **Issue** titles (`feat:`, `bug:`, `docs:`), no required module scope. State problem/goal and verifiable completion conditions, distinguishing evidence from assumptions. Triage establishes validity, duplicates, priority and size; **PRs and commits** keep their existing Conventional Commits and CI checks. Avoid AI-agent narration, personal references and opaque internal tracking codes in issue prose.
+See [the local contributor guide](CONTRIBUTING.md). Use clear type-only **Issue** titles (`feat:`, `bug:`, `docs:`), no required module scope. State problem/goal and verifiable completion conditions, distinguishing evidence from assumptions. Triage establishes validity, duplicates, priority and size; **PRs and commits** keep their existing Conventional Commits and CI checks. The squash-merged PR title drives the Release Please version bump and `CHANGELOG.md`, so do not edit `CHANGELOG.md` in a PR; see [the release process](docs/RELEASE_PROCESS.md). Avoid AI-agent narration, personal references and opaque internal tracking codes in issue prose.
 
 
 ## Purpose

@@ -1,6 +1,6 @@
 # Contributing to gorm-cubrid
 
-For issues, use clear type-only titles (`feat:`, `bug:`, etc.) without module scope and state observable acceptance criteria. PRs and commits use the repository's Conventional Commits/CI rules. Read [AGENTS.md](AGENTS.md) for this repository's review guidance.
+For issues, use clear type-only titles (`feat:`, `bug:`, etc.) without module scope and state observable acceptance criteria. PRs and commits use the repository's Conventional Commits/CI rules; the squash-merged PR title becomes the `CHANGELOG.md` entry, so do not edit `CHANGELOG.md` in a PR (see [the release process](docs/RELEASE_PROCESS.md)). Read [AGENTS.md](AGENTS.md) for this repository's review guidance.
 
 Thank you for your interest in contributing!
 
@@ -70,12 +70,18 @@ make fmt    # runs gofmt -w
 Follow the conventional commits style used in this repository:
 
 ```
-<type>: <short summary>
+<type>[(scope)][!]: <short summary>
 
 [optional body]
 ```
 
-Types: `feat`, `fix`, `test`, `docs`, `refactor`, `chore`
+Types: `feat`, `fix`, `perf`, `revert`, `docs`, `refactor`, `test`, `build`,
+`ci`, `style`, `chore`. Add `!` for a breaking change.
+
+PRs are squash-merged, so the **PR title** becomes the commit subject on
+`main`; `pr-title.yml` checks it. Release Please uses these titles to choose
+the next version and write `CHANGELOG.md` (`fix:` patch, `feat:` minor,
+breaking change minor while 0.x). See the [release process](docs/RELEASE_PROCESS.md).
 
 Examples:
 ```
@@ -108,7 +114,8 @@ Before opening a PR, please verify:
 - [ ] `go vet ./...` is clean
 - [ ] `go test -race ./...` passes (all unit tests)
 - [ ] New behaviour is covered by tests
-- [ ] `CHANGELOG.md` is updated under `## [Unreleased]`
+- [ ] The PR title follows Conventional Commits; `CHANGELOG.md` is not edited
+      (Release Please generates it)
 - [ ] If adding a CUBRID-specific DDL behaviour, the reason is documented
       in a code comment (CUBRID does not always match MySQL/PostgreSQL syntax)
 
