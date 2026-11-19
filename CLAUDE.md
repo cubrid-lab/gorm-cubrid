@@ -4,7 +4,7 @@
 
 ## 프로젝트 개요
 
-GitHub 저장소 `cubrid-lab/gorm-cubrid` (Go module 경로 `github.com/cubrid-labs/gorm-cubrid`)는 [GORM](https://gorm.io/) ORM의 CUBRID 데이터베이스 드라이버입니다.
+GitHub 저장소 `cubrid-lab/gorm-cubrid` (Go module 경로 `github.com/cubrid-lab/gorm-cubrid`)는 [GORM](https://gorm.io/) ORM의 CUBRID 데이터베이스 드라이버입니다.
 `gorm.Dialector` 인터페이스를 구현하며, CUBRID 11.2+ 를 대상으로 합니다.
 
 ## 파일 구조

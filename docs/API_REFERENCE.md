@@ -25,7 +25,7 @@ flowchart TD
 ```go
 import (
     "gorm.io/gorm"
-    cubrid "github.com/cubrid-labs/gorm-cubrid"
+    cubrid "github.com/cubrid-lab/gorm-cubrid"
     _ "github.com/cubrid-labs/cubrid-go"
 )
 
