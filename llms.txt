@@ -24,7 +24,6 @@ Key facts:
 - [Quick Start](https://github.com/cubrid-lab/gorm-cubrid/blob/main/README.md#usage): Basic GORM setup with CUBRID, AutoMigrate, and CRUD
 - [Advanced Config](https://github.com/cubrid-lab/gorm-cubrid/blob/main/README.md#advanced-configuration): Custom string sizes and configuration options
 - [Existing Connection](https://github.com/cubrid-lab/gorm-cubrid/blob/main/README.md#using-an-existing-connection): Reuse an existing `database/sql` connection
-- [CUBRID Cookbook — GORM](https://github.com/cubrid-labs/cubrid-cookbook/tree/main/go/gorm): Production-ready GORM examples — connect, CRUD, relationships
 
 ## API Reference
 
