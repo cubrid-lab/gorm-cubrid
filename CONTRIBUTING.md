@@ -78,8 +78,10 @@ Follow the conventional commits style used in this repository:
 Types: `feat`, `fix`, `perf`, `revert`, `docs`, `refactor`, `test`, `build`,
 `ci`, `style`, `chore`. Add `!` for a breaking change.
 
-PRs are squash-merged, so the **PR title** becomes the commit subject on
-`main`; `pr-title.yml` checks it. Release Please uses these titles to choose
+PRs are squash-merged and, with the repository settings described in the
+release process, the **PR title** becomes the commit subject on `main`;
+`pr-title.yml` checks it. A PR created with GitHub's **Revert** button must be
+retitled from `Revert "..."` to `revert: ...`. Release Please uses these titles to choose
 the next version and write `CHANGELOG.md` (`fix:` patch, `feat:` minor,
 breaking change minor while 0.x). See the [release process](docs/RELEASE_PROCESS.md).
 
