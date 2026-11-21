@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0](https://github.com/cubrid-lab/gorm-cubrid/compare/v0.1.0...v0.2.0) (2026-11-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* move the Go module to github.com/cubrid-lab/gorm-cubrid ([#64](https://github.com/cubrid-lab/gorm-cubrid/issues/64))
+
+### Bug Fixes
+
+* add #nosec G104 annotations for clause.Writer buffer writes ([ca16955](https://github.com/cubrid-lab/gorm-cubrid/commit/ca16955dc4625cc843eb0a004aa82fe31513e8f1))
+* add gosec annotations and fix unhandled errors in migrator ([e44c770](https://github.com/cubrid-lab/gorm-cubrid/commit/e44c770d9e06896c36acbdcc51bf673308d9b171))
+* **ci:** run govulncheck job on Go 1.25 ([#19](https://github.com/cubrid-lab/gorm-cubrid/issues/19)) ([c4b9f00](https://github.com/cubrid-lab/gorm-cubrid/commit/c4b9f006944d23cde13d992f59b2ebf1d31ad1ab))
+* **ci:** run govulncheck on the stable Go release ([#21](https://github.com/cubrid-lab/gorm-cubrid/issues/21)) ([6a6fcb0](https://github.com/cubrid-lab/gorm-cubrid/commit/6a6fcb0b340e838e09d2d401b67d32df34506f19))
+* update DSN format from cci:CUBRID: to cubrid:// to match cubrid-go driver ([e4de201](https://github.com/cubrid-lab/gorm-cubrid/commit/e4de2010f5c01a58dbb77a7e8d2233f3ea4ffdc3))
+
+
+### Miscellaneous Chores
+
+* move the Go module to github.com/cubrid-lab/gorm-cubrid ([#64](https://github.com/cubrid-lab/gorm-cubrid/issues/64)) ([c455ca7](https://github.com/cubrid-lab/gorm-cubrid/commit/c455ca797f824a5db284e9ff3b07a905061316c9))
+
 ## [Unreleased]
 
 ### Upgrade notes
