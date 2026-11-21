@@ -4,6 +4,31 @@ For issues, use clear type-only titles (`feat:`, `bug:`, etc.) without module sc
 
 Thank you for your interest in contributing!
 
+
+## Suggest improvements and credit problem discovery
+
+You do not need to author code to make a valuable contribution. Found
+confusing documentation, a missing test, surprising behavior, an awkward
+developer experience or a possible improvement? Choose **Improvement Idea**
+from [New issue](https://github.com/cubrid-lab/gorm-cubrid/issues/new/choose).
+Describe what you noticed; a solution, exact cause, reproducible test and
+acceptance criteria are **not prerequisites for reporting**. Maintainers
+triage duplicates, risk, priority, scope and checkable implementation criteria.
+
+Use the owning repository and avoid sensitive data, private logs, and
+unreported security vulnerabilities in public issues. A new suggestion
+does not waive compatibility, security, CI or release constraints. Small
+self-contained PRs need no *extra* issue solely for process when this
+repository's existing implementation policy allows direct PRs; coordinate
+with current owners and overlapping PRs.
+
+When a community report leads to a PR, reviewers should link the source
+issue and recognize a **verified reporter as the reporter**, not the code
+author. Retain separately verified PR author/co-author credits according
+to the project's curated release-note rules. If appropriate, name the
+reporter separately (`reported by @handle`), without inventing authorship,
+mistaking bots for people, or adding mandatory attribution boilerplate.
+
 ## Requirements
 
 | Tool | Version | Purpose |
