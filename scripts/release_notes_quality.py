@@ -21,6 +21,12 @@ ALLOWED = {
     "Documentation", "CI", "Tests",
 }
 RAW_GENERATED = re.compile(r"^(?:\*\s+|-\s+\*\*(?:feat|fix|chore|ci|docs|test):)", re.I)
+# Give each user-visible change its own traceable credit. Compatibility and
+# Upgrade notes may describe factual constraints without an author byline.
+ATTRIBUTED_SECTIONS = {
+    "Added", "Changed", "Deprecated", "Removed", "Fixed", "Security",
+    "Performance", "Features", "Bug Fixes", "Documentation", "CI", "Tests",
+}
 
 
 def violations(text: str, version: str, repository: str) -> list[str]:
@@ -75,14 +81,16 @@ def violations(text: str, version: str, repository: str) -> list[str]:
                 errors.append(f"uncurated release-please bullet under {title}")
             if len(line.strip()) < 12:
                 errors.append(f"non-informative bullet under {title}")
+            if title in ATTRIBUTED_SECTIONS and not re.search(
+                r"\bby @[A-Za-z0-9][A-Za-z0-9-]*\b", line
+            ):
+                errors.append(f"missing contributor credit under {title}")
             key = re.sub(r"\s+", " ", line.strip().casefold())
             if key in seen:
                 errors.append(f"duplicate bullet under {title}")
             seen.add(key)
     if not bullets:
         errors.append("no changes described")
-    if " by @" not in text:
-        errors.append("missing traceable contributor byline; verify author evidence")
     return errors
 
 
