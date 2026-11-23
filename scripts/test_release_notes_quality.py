@@ -25,23 +25,23 @@ class ReleaseNotesQualityTests(unittest.TestCase):
 
     def test_missing_second_change_author_fails_even_when_first_has_credit(self):
         extra = "- Fix parameter handling ([#13](https://github.com/cubrid-lab/example/pull/13))"
-        body = GOOD.replace("**Full Changelog:**", extra + "\\n\\n**Full Changelog:**")
+        body = GOOD.replace("**Full Changelog:**", extra + "\n\n**Full Changelog:**")
         self.assertTrue(any("missing contributor credit under Bug Fixes" in x
                             for x in self.check(body)))
 
     def test_compatibility_warning_does_not_require_author(self):
-        warning = "### Compatibility\\n\\n- CUBRID server support still requires live validation.\\n\\n"
+        warning = "### Compatibility\n\n- CUBRID server support still requires live validation.\n\n"
         body = GOOD.replace("### Bug Fixes", warning + "### Bug Fixes")
         self.assertEqual([], self.check(body))
 
     def test_each_attributed_section_requires_author(self):
-        body = GOOD.replace("### Bug Fixes", "### Documentation\\n\\n- Add a migration guide.\\n\\n### Bug Fixes")
+        body = GOOD.replace("### Bug Fixes", "### Documentation\n\n- Add a migration guide.\n\n### Bug Fixes")
         self.assertTrue(any("missing contributor credit under Documentation" in x
                             for x in self.check(body)))
 
     def test_multiple_changes_with_separate_credits_pass(self):
         extra = "- Improve connection timeout errors ([#13](https://github.com/cubrid-lab/example/pull/13)) by @second-person"
-        body = GOOD.replace("**Full Changelog:**", extra + "\\n\\n**Full Changelog:**")
+        body = GOOD.replace("**Full Changelog:**", extra + "\n\n**Full Changelog:**")
         self.assertEqual([], self.check(body))
 
     def test_missing_user_summary(self):
